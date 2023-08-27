@@ -1,6 +1,6 @@
 /* Paste this into your browser's JS console and wait for download. */
 
-let downloadName = "pdfpngpack";
+let downloadName = "pdfpack";
 let imgPayload = "";
 
 function generateImgPayload (){
@@ -68,7 +68,7 @@ if (chosenElement.scrollHeight > chosenElement.clientHeight) {
 	//console.log("scrollDistance: " + scrollDistance);
 
 	let loopCounter = 0;
-	function myLoop(remainingHeightToScroll, scrollToLocation) {
+	function scrollLoop(remainingHeightToScroll, scrollToLocation) {
 		loopCounter++;
 		console.log(loopCounter);
 
@@ -84,7 +84,7 @@ if (chosenElement.scrollHeight > chosenElement.clientHeight) {
 			}
 
 			if (remainingHeightToScroll >= chosenElement.clientHeight){
-				myLoop(remainingHeightToScroll, scrollToLocation)
+				scrollLoop(remainingHeightToScroll, scrollToLocation)
 			} else {
 				setTimeout(function() {
 					generateImgPayload();
@@ -93,7 +93,7 @@ if (chosenElement.scrollHeight > chosenElement.clientHeight) {
 
 		}, getRandomInt(300,500) );
 	}
-	myLoop(0, 0);
+	scrollLoop(0, 0);
 
 } else {
 	console.log("… done. Creating download.");

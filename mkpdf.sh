@@ -3,47 +3,46 @@
 #Prerequisites: base64, convert (ImageMagick)
 #Also I didn't managed to get the last page, but it's usually the back cover so I didn't lose my sleep for it, i'm sorry
 
-pos=$(pwd)
-
-if [ -z "$1" ]; then
+if [ ! -f "$1" ]; then
 	echo "Usage: $0 [basename]"
-	echo "Where \"basename\" is the downloaded PDF datafile's base name without suffix."
+	echo "Where \"basename\" is the downloaded PDF page archive's file name"
 	exit 1
 fi
 
 echo "Processing file: $1"
 
-mkdir -p "$1"_folder
-cd "$1"_folder
-mkdir -p pages
-cd pages
-empt=''
-pnghead="data:image/png;base64,"
-counter=0
+mkdir -p "$1"_pages
+cd "$1"_pages
+PNGHEAD="data:image/png;base64,"
+COUNTER=0
 
-echo "Extracting pages ..."
+#echo "Extracting pages ..."
 
 while read line
 do
-	if echo "$line" | grep -q $pnghead; then
-		if (( counter )); then
-			echo "$data_img" | base64 -di - > $counter.png
+	if echo "$line" | grep -q $PNGHEAD; then
+		#echo "$COUNTER PNG header found."
+		if (( COUNTER )); then
+			#echo "$COUNTER Decoding Data."
+			echo "$data_img" | base64 -di - > $COUNTER.png
+			#echo "$COUNTER Data decoded."
 		fi
-		data_img="${line/$pnghead/$empt}"
-		let "counter++"
+		#echo "$COUNTER Removing header."
+		#FIXME: Hangs on Mac OS with 100% CPU
+		data_img="${line/$PNGHEAD/}"
+		#echo "$COUNTER Data set."
+		let "COUNTER++"
 	else
+		#echo "$COUNTER One more line ..."
 		data_img+=$line$'\n'
 	fi
-	
-done < ../../"$1"
+done < ../"$1"
 
-echo "$data_img" > $counter.base64
-echo "$data_img" | base64 -di - > $counter.png
+# Save last data
+echo "$data_img" | base64 -di - > $COUNTER.png
 
 echo "Converting to pdf ..."
-
 convert $(ls -1v) ../$1.pdf 
-cd $pos
+cd ..
 
 echo "PDF completed!"
-
