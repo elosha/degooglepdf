@@ -20,8 +20,8 @@ function generateImgPayload (){
 			canvas.height = img.naturalHeight;
 			//console.log("Width: " + img.naturalWidth + ", Height: " + img.naturalHeight);
 			context.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
-			let imgDataURL = canvas.toDataURL();
-			//console.log('imgDataURL: ' + imgDataURL);
+			//let imgDataURL = canvas.toDataURL(); // Uses default file type
+			let imgDataURL = canvas.toDataURL('image/jpeg', 0.9); // Converts to JPEG
 
 			if (imgPayload === "") {
 				imgPayload = imgDataURL;

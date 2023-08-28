@@ -14,21 +14,26 @@ echo "Processing file: $1"
 mkdir -p "$1"_pages
 cd "$1"_pages
 PNGHEAD="data:image\/png;base64,"
+JPEGHEAD="data:image\/jpeg;base64,"
 COUNTER=1
 
 echo -n "Extracting pages: "
 
 while read line
 do
+	echo -n "$COUNTER, "
+	padcounter=$(printf "%04d" $COUNTER)
 	if echo "$line" | grep -q $PNGHEAD; then
-		echo -n "$COUNTER, "
-		padcounter=$(printf "%04d" $COUNTER)
 		imgdata=$(echo "$line" | sed -e "s/^$PNGHEAD//")
 		echo "$imgdata" | base64 -di - > $padcounter.png
 		convert $padcounter.png $padcounter.jpg
 		rm $padcounter.png
-		let "COUNTER++"
 	fi
+	if echo "$line" | grep -q $JPEGHEAD; then
+		imgdata=$(echo "$line" | sed -e "s/^$JPEGHEAD//")
+		echo "$imgdata" | base64 -di - > $padcounter.jpg
+	fi
+	let "COUNTER++"
 done < ../"$1"
 echo "done."
 
