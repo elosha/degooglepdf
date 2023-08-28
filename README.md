@@ -9,12 +9,12 @@ Download view only protected files from Google Drive. Optimized for heavy files.
 
 ## Technical details
 The browser part `downloader.js` automatically scrolls the displayed PDF to makes sure all pages are being loaded.
-Then the pages (in base64-encoded PNG format) will be archived and provided as download.
+Then the pages (stored in base64-encoded PNG format) will be archived and provided as download.
 
-The shell part `mkpdf.sh` converts the archive to a proper PDF file.
+The shell part `mkpdf.sh` extracts the images from the archive, processes and then combines them to a proper PDF file.
 
 ## Application
-Someone might have uploaded a PDF to their Google Drive, but put it into "view only" mode. This constellation appears problematic in several situations:
+Someone may have uploaded a PDF file to their Google Drive, but set it to view-only mode. This constellation is problematic in several situations:
 * Offline viewing
 * Viewing without Google tracking
 * Permanent archival

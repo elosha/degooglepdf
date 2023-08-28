@@ -22,15 +22,18 @@ while read line
 do
 	if echo "$line" | grep -q $PNGHEAD; then
 		echo -n "$COUNTER, "
+		padcounter=$(printf "%04d" $COUNTER)
 		imgdata=$(echo "$line" | sed -e "s/^$PNGHEAD//")
-		echo "$imgdata" | base64 -di - > $COUNTER.png
+		echo "$imgdata" | base64 -di - > $padcounter.png
+		convert $padcounter.png $padcounter.jpg
+		rm $padcounter.png
 		let "COUNTER++"
 	fi
 done < ../"$1"
 echo "done."
 
 echo -n "Converting to pdf ..."
-convert $(ls -1v *.png) ../$1.pdf 
+convert $(ls -1v *.jpg) ../$1.pdf
 cd ..
 
 echo " completed!"
