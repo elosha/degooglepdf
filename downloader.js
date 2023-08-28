@@ -1,6 +1,6 @@
 /* Paste this into your browser's JS console and wait for download. */
 
-window.devicePixelRatio = 3; // Make Google deliver highres pictures
+devicePixelRatio = 3; // Make Google deliver highres pictures – vary if needed
 
 let downloadName = document.querySelector('meta[property="og:title"]').content;
 let imgPayload = "";
