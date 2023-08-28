@@ -1,6 +1,6 @@
 /* Paste this into your browser's JS console and wait for download. */
 
-let downloadName = "pdfpack";
+let downloadName = document.querySelector('meta[property="og:title"]').content;
 let imgPayload = "";
 
 function generateImgPayload (){
@@ -36,7 +36,7 @@ function generateImgPayload (){
 
 	url = URL.createObjectURL(file);
 	anchorElement.href = url;
-	anchorElement.download = downloadName;
+	anchorElement.download = downloadName+'.imgpack';
 	document.body.appendChild(anchorElement);
 	anchorElement.click();
 }
