@@ -38,7 +38,7 @@ function generateImgPayload (){
 
 	url = URL.createObjectURL(file);
 	anchorElement.href = url;
-	anchorElement.download = downloadName+'.imgpack';
+	anchorElement.download = downloadName.replace('.pdf', '')+'.imgpack';
 	document.body.appendChild(anchorElement);
 	anchorElement.click();
 }
