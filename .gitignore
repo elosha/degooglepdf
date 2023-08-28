@@ -1,0 +1,5 @@
+!/.gitignore
+!/.github
+.vscode
+**/.DS_Store
+Icon?
