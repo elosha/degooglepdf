@@ -27,4 +27,5 @@ Someone might have uploaded a PDF to their Google Drive, but put it into "view o
 
 ## Requirements
 * Webbrowser with JS console
+* sed
 * ImageMagick (`convert`)
