@@ -1,6 +1,6 @@
 /* Paste this into your browser's JS console and wait for download. */
 
-devicePixelRatio = 3; // Make Google deliver highres pictures – vary if needed
+devicePixelRatio = 2; // Make Google deliver highres pictures – vary if needed
 
 let downloadName = document.querySelector('meta[property="og:title"]').content;
 let imgPayload = "";
@@ -25,11 +25,7 @@ function generateImgPayload (){
 			//let imgDataURL = canvas.toDataURL(); // Uses default file type
 			let imgDataURL = canvas.toDataURL('image/jpeg', 0.9); // Converts to JPEG
 
-			if (imgPayload === "") {
-				imgPayload = imgDataURL;
-			} else {
-				imgPayload = imgPayload + "\n" + imgDataURL;
-			}
+			imgPayload += imgDataURL + "\n";
 		}
 	}
 
