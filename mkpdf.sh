@@ -44,8 +44,12 @@ do
 done < ../"$1"
 echo "done."
 
-echo -n "Converting to pdf ..."
-convert $(ls -1v) "../$basename.pdf"
+if command -v convert > /dev/null; then
+	echo -n "Generating PDF ..."
+	convert $(ls -1v) "../$basename.pdf"
+	echo " completed!"
+else
+	echo "ImageMagick not installed, skipping PDF generation."
+fi
 cd ..
 
-echo " completed!"
