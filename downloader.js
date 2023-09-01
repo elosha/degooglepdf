@@ -86,7 +86,7 @@ if (chosenElement.scrollHeight > chosenElement.clientHeight) {
 			} else {
 				setTimeout(function() {
 					generateImgPayload();
-				}, 1500);
+				}, 2500);
 			}
 
 		}, getRandomInt(300,500) );
@@ -97,5 +97,5 @@ if (chosenElement.scrollHeight > chosenElement.clientHeight) {
 	console.log("… done. Creating download.");
 	setTimeout(function() {
 		generateImgPayload();
-	}, 1500);
+	}, 2500);
 }
