@@ -2,6 +2,12 @@
 
 #Prerequisites: base64, sed, convert (ImageMagick)
 
+PNGHEAD="data:image\/png;base64,"
+JPEGHEAD="data:image\/jpeg;base64,"
+COUNTER=1
+SKIPEXTRACT=0
+
+# Get filename
 if [ -z "$1" ]; then
 	echo "Usage: $0 input"
 	echo "Where \"input\" is the downloaded PDF page archive file name"
@@ -17,32 +23,47 @@ echo "Processing file: $1"
 # Base file name without extension/spaces
 basename=${1/.imgpack/}
 basename=${basename/ /_}
+dirname="$basename"_pages
 
-mkdir -p "$basename"_pages
-cd "$basename"_pages
-PNGHEAD="data:image\/png;base64,"
-JPEGHEAD="data:image\/jpeg;base64,"
-COUNTER=1
+if [ -d "$dirname" ]; then
+	read -p "It seems \"${1}\" already had been extracted to \"${dirname}\". Use existing files? (y/n) " yn
+	case $yn in
+		[yY] ) SKIPEXTRACT=1
+			;;
+		[nN] ) SKIPEXTRACT=0
+			echo "Purging existing files."
+			rm -f "$dirname"/*.jpg
+			;;
+		* ) echo Invalid response
+			;;
+	esac
+else
+	mkdir -p "$dirname"
+fi
 
-echo -n "Extracting pages: "
+cd "$dirname"
 
-while read line
-do
-	echo -n "$COUNTER, "
-	padcounter=$(printf "%04d" $COUNTER)
-	if echo "$line" | grep -q $PNGHEAD; then
-		imgdata=$(echo "$line" | sed -e "s/^$PNGHEAD//")
-		echo "$imgdata" | base64 -di - > $padcounter.png
-		convert $padcounter.png $padcounter.jpg
-		rm $padcounter.png
-	fi
-	if echo "$line" | grep -q $JPEGHEAD; then
-		imgdata=$(echo "$line" | sed -e "s/^$JPEGHEAD//")
-		echo "$imgdata" | base64 -di - > $padcounter.jpg
-	fi
-	let "COUNTER++"
-done < ../"$1"
-echo "done."
+if [ $SKIPEXTRACT == 0 ]; then
+	echo -n "Extracting pages: "
+
+	while read line
+	do
+		echo -n "$COUNTER, "
+		padcounter=$(printf "%04d" $COUNTER)
+		if echo "$line" | grep -q $PNGHEAD; then
+			imgdata=$(echo "$line" | sed -e "s/^$PNGHEAD//")
+			echo "$imgdata" | base64 -di - > $padcounter.png
+			convert $padcounter.png $padcounter.jpg
+			rm $padcounter.png
+		fi
+		if echo "$line" | grep -q $JPEGHEAD; then
+			imgdata=$(echo "$line" | sed -e "s/^$JPEGHEAD//")
+			echo "$imgdata" | base64 -di - > $padcounter.jpg
+		fi
+		let "COUNTER++"
+	done < ../"$1"
+	echo "done."
+fi
 
 if command -v convert > /dev/null; then
 	echo -n "Generating PDF ..."
@@ -52,4 +73,3 @@ else
 	echo "ImageMagick not installed, skipping PDF generation."
 fi
 cd ..
-
