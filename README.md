@@ -7,6 +7,12 @@ Download **view only protected** PDF files from Google Drive. Optimized for **la
 3. Watch the script scroll through the document and wait for the download
 4. Run `mkpdf.sh [file]` to create a PDF file
 
+## Hint
+Do you need to fix up the pages before creating a PDF?
+
+5. Manipulate the images in the folder named after your file
+6. Run `mkpdf.sh [file]` again and press "y" to use those existing files
+
 ## Technical details
 The browser part `downloader.js` first simulates a high DPI display to request high resolution pages (you may vary the devicePixelRatio).
 It then automatically scrolls the displayed PDF to makes sure all pages are being loaded.
