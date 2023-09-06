@@ -11,11 +11,11 @@ Download **view only protected** PDF files from Google Drive. Optimized for **la
 Do you need to fix up the pages before creating a PDF?
 
 5. Manipulate the images in the folder named after your file
-6. Run `mkpdf.sh [file]` again and press "y" to use those existing files
+6. Run `mkpdf.sh [file]` again and press "y" when asked to use those existing files
 
 ## Technical details
 The browser part `downloader.js` first simulates a high DPI display to request high resolution pages (you may vary the devicePixelRatio).
-It then automatically scrolls the displayed PDF to makes sure all pages are being loaded.
+It then automatically scrolls the displayed PDF to make sure all pages are being loaded.
 Then the pages (stored as JPEGs in base64-encoded format) will be archived and provided as download.
 
 The bash script `mkpdf.sh` extracts all images from the archive, processes and then combines them to a proper PDF file.
