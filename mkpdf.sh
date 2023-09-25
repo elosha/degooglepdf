@@ -22,11 +22,11 @@ echo "Processing file: $1"
 
 # Base file name without extension/spaces
 basename=${1/.imgpack/}
-basename=${basename/ /_}
+basename=${basename// /_}
 dirname="$basename"_pages
 
 if [ -d "$dirname" ]; then
-	read -p "It seems \"${1}\" already had been extracted to \"${dirname}\". Use existing files? (y/n) " yn
+	read -p "It seems \"${1}\" already has been extracted to \"${dirname}\". Use existing files? (y/n) " yn
 	case $yn in
 		[yY] ) SKIPEXTRACT=1
 			;;
