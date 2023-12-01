@@ -1,7 +1,9 @@
 /* Paste this into your browser's JS console and wait for download. */
 
+prevDevicePixelRatio = devicePixelRatio;
 devicePixelRatio = 2; // Make Google deliver highres pictures – vary if needed
 degooglePdf();
+devicePixelRatio = prevDevicePixelRatio;
 
 function degooglePdf() {
 	let allElements = document.querySelectorAll("*");
