@@ -1,14 +1,73 @@
 /* Paste this into your browser's JS console and wait for download. */
 
 devicePixelRatio = 2; // Make Google deliver highres pictures – vary if needed
+degooglePdf();
 
-let downloadName = document.querySelector('meta[property="og:title"]').content;
-let imgPayload = "";
+function degooglePdf() {
+	let allElements = document.querySelectorAll("*");
+	let chosenElement;
+	let heightOfScrollableElement = 0;
+
+	for (i = 0; i < allElements.length; i++) {
+		if ( allElements[i].scrollHeight>=allElements[i].clientHeight){
+			if (heightOfScrollableElement < allElements[i].scrollHeight){
+				//console.log(allElements[i]);
+				//console.log(allElements[i].scrollHeight);
+				heightOfScrollableElement = allElements[i].scrollHeight;
+				chosenElement = allElements[i];
+			}
+		}
+	}
+
+	if (chosenElement.scrollHeight > chosenElement.clientHeight) {
+		console.log("Auto Scroll");
+
+		let scrollDistance = Math.round(chosenElement.clientHeight/2);
+		//console.log("scrollHeight: " + chosenElement.scrollHeight);
+		//console.log("scrollDistance: " + scrollDistance);
+
+		let loopCounter = 0;
+		function scrollLoop(remainingHeightToScroll, scrollToLocation) {
+			loopCounter++;
+			console.log(loopCounter);
+
+			setTimeout(function() {
+				if (remainingHeightToScroll === 0){
+					scrollToLocation = scrollDistance;
+					chosenElement.scrollTo(0, scrollToLocation);
+					remainingHeightToScroll = chosenElement.scrollHeight - scrollDistance;
+				} else {
+					scrollToLocation = scrollToLocation + scrollDistance ;
+					chosenElement.scrollTo(0, scrollToLocation);
+					remainingHeightToScroll = remainingHeightToScroll - scrollDistance;
+				}
+
+				if (remainingHeightToScroll >= chosenElement.clientHeight){
+					scrollLoop(remainingHeightToScroll, scrollToLocation)
+				} else {
+					setTimeout(function() {
+						generateImgPayload();
+					}, 2500);
+				}
+
+			}, getRandomInt(300,500) );
+		}
+		scrollLoop(0, 0);
+
+	} else {
+		console.log("… done. Creating download.");
+		setTimeout(function() {
+			generateImgPayload();
+		}, 2500);
+	}
+}
 
 function generateImgPayload (){
+	const checkURLString = "blob:https://drive.google.com/";
 	let imgTags = document.getElementsByTagName("img");
-	let checkURLString = "blob:https://drive.google.com/";
+	let downloadName = document.querySelector('meta[property="og:title"]').content;
 	let validImgTagCounter = 0;
+	let imgPayload = "";
 
 	for (i = 0; i < imgTags.length; i++) {
 		if (imgTags[i].src.substring(0, checkURLString.length) === checkURLString){
@@ -41,61 +100,4 @@ function generateImgPayload (){
 
 function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min) + min);
-}
-
-let allElements = document.querySelectorAll("*");
-let chosenElement;
-let heightOfScrollableElement = 0;
-
-for (i = 0; i < allElements.length; i++) {
-	if ( allElements[i].scrollHeight>=allElements[i].clientHeight){
-		if (heightOfScrollableElement < allElements[i].scrollHeight){
-			//console.log(allElements[i]);
-			//console.log(allElements[i].scrollHeight);
-			heightOfScrollableElement = allElements[i].scrollHeight;
-			chosenElement = allElements[i];
-		}
-	}
-}
-
-if (chosenElement.scrollHeight > chosenElement.clientHeight) {
-	console.log("Auto Scroll");
-
-	let scrollDistance = Math.round(chosenElement.clientHeight/2);
-	//console.log("scrollHeight: " + chosenElement.scrollHeight);
-	//console.log("scrollDistance: " + scrollDistance);
-
-	let loopCounter = 0;
-	function scrollLoop(remainingHeightToScroll, scrollToLocation) {
-		loopCounter++;
-		console.log(loopCounter);
-
-		setTimeout(function() {
-			if (remainingHeightToScroll === 0){
-				scrollToLocation = scrollDistance;
-				chosenElement.scrollTo(0, scrollToLocation);
-				remainingHeightToScroll = chosenElement.scrollHeight - scrollDistance;
-			} else {
-				scrollToLocation = scrollToLocation + scrollDistance ;
-				chosenElement.scrollTo(0, scrollToLocation);
-				remainingHeightToScroll = remainingHeightToScroll - scrollDistance;
-			}
-
-			if (remainingHeightToScroll >= chosenElement.clientHeight){
-				scrollLoop(remainingHeightToScroll, scrollToLocation)
-			} else {
-				setTimeout(function() {
-					generateImgPayload();
-				}, 2500);
-			}
-
-		}, getRandomInt(300,500) );
-	}
-	scrollLoop(0, 0);
-
-} else {
-	console.log("… done. Creating download.");
-	setTimeout(function() {
-		generateImgPayload();
-	}, 2500);
 }

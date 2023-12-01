@@ -22,7 +22,7 @@ echo "Processing file: $1"
 
 # Base file name without extension/spaces
 basename=${1/.imgpack/}
-basename=${basename// /_}
+#basename=${basename// /_}
 dirname="$basename"_pages
 
 if [ -d "$dirname" ]; then
@@ -65,6 +65,7 @@ if [ $SKIPEXTRACT == 0 ]; then
 	echo "done."
 fi
 
+# Use ImageMagick to make PDF if available
 if command -v convert > /dev/null; then
 	echo -n "Generating PDF ..."
 	convert $(ls -1v) "../$basename.pdf"
